@@ -25,7 +25,7 @@ class Config(object):
         if os.environ.has_key('ALT_FIREBASE_PATH'):
             self.firebase_path = os.environ.get('ALT_FIREBASE_PATH')
         else:
-            self.firebase_path = '/test'
+            self.firebase_path = '/hosts'
 
         # The file name to store data. This value can be overriden by the environment
         # variable 'ALT_FILENAME'. The default value is 'file.json'.
