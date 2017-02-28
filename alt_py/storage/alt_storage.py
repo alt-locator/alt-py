@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class AltStorage:
+class AltStorage(object):
     """The storage base class."""
 
     __metaclass__ = ABCMeta

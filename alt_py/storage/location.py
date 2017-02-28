@@ -38,10 +38,23 @@ class Location(object):
         # The name to associate with this location.
         self.name = name
 
-    def to_json(self):
+    def to_Json(self):
         """to json"""
         pass
 
     def to_string(self):
         """to string"""
         pass
+
+    def to_location(self, json_obj):
+        """convert a json object to a location object"""
+        if 'name' in json_obj:
+            self.name = json_obj['name']
+        if 'ports' in json_obj:
+            self.ports = json_obj['ports']
+        if 'localIpAddress' in json_obj:
+            self.local_ip_address = json_obj['localIpAddress']
+        if 'externalIpAddress' in json_obj:
+            self.external_ip_address = json_obj['externalIpAddress']
+        if 'timestamp' in json_obj:
+            self.timestamp = json_obj['timestamp']

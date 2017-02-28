@@ -21,7 +21,6 @@ class MockStorage(AltStorage):
         return True
 
     def remove_host(self, location):
-        
         for host in self.hosts:
             if host.name == location.name:
                 self.hosts.remove(location)
