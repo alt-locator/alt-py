@@ -16,7 +16,7 @@ class FirebaseStorage(alt_storage.AltStorage):
         self.firebase_path = config_setup.firebase_path
 
     def get_hosts(self):
-        url = 'https://' + self.firebase_host + self.firebase_path + '.json'
+        url = 'https://{}{}.json'.format(self.firebase_host, self.firebase_path)
         req = requests.get(url)
         json_data = json.loads(req.text)
         locations = []
@@ -25,10 +25,15 @@ class FirebaseStorage(alt_storage.AltStorage):
                 location = alt_location.Location()
                 location.to_location(json_data[key])
                 locations.append(location)
-        return location
+        return sorted(locations)
 
     def update_host(self, location):
-        pass
+        url = 'https://{}{}/{}.json'.format(self.firebase_host, self.firebase_path, location.name)
+        req = requests.patch(url, location.to_json())
+        json_data = json.loads(req.text)
+        location = alt_location.Location()
+        location.to_location(json_data)
+        return location
 
     def remove_host(self, location):
         pass

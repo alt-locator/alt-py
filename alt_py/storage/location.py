@@ -1,3 +1,6 @@
+import json
+
+
 class Location(object):
     """The location model that includes network information."""
 
@@ -38,9 +41,9 @@ class Location(object):
         # The name to associate with this location.
         self.name = name
 
-    def to_Json(self):
+    def to_json(self):
         """to json"""
-        pass
+        return json.dumps(self.__dict__)
 
     def to_string(self):
         """to string"""
@@ -48,13 +51,15 @@ class Location(object):
 
     def to_location(self, json_obj):
         """convert a json object to a location object"""
+        if 'externalIpAddress' in json_obj:
+            self.external_ip_address = json_obj['externalIpAddress']
+        if 'localIpAddress' in json_obj:
+            self.local_ip_address = json_obj['localIpAddress']
+        if 'macAddress' in json_obj:
+            self.mac_address = json_obj['macAddress']
         if 'name' in json_obj:
             self.name = json_obj['name']
         if 'ports' in json_obj:
             self.ports = json_obj['ports']
-        if 'localIpAddress' in json_obj:
-            self.local_ip_address = json_obj['localIpAddress']
-        if 'externalIpAddress' in json_obj:
-            self.external_ip_address = json_obj['externalIpAddress']
         if 'timestamp' in json_obj:
             self.timestamp = json_obj['timestamp']
