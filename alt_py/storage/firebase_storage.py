@@ -17,23 +17,39 @@ class FirebaseStorage(alt_storage.AltStorage):
 
     def get_hosts(self):
         url = 'https://{}{}.json'.format(self.firebase_host, self.firebase_path)
-        req = requests.get(url)
-        json_data = json.loads(req.text)
+        json_data = self.make_request_(url, 'get')
         locations = []
         if json_data is not None:
             for key in json_data.keys():
                 location = alt_location.Location()
                 location.to_location(json_data[key])
                 locations.append(location)
-        return sorted(locations)
+        return sorted(locations, key=lambda loc: loc.name)
 
     def update_host(self, location):
-        url = 'https://{}{}/{}.json'.format(self.firebase_host, self.firebase_path, location.name)
-        req = requests.patch(url, location.to_json())
-        json_data = json.loads(req.text)
-        location = alt_location.Location()
-        location.to_location(json_data)
-        return location
+        url = 'https://{}{}/{}.json'.format(self.firebase_host, self.firebase_path,
+            location.name)
+        json_data = self.make_request_(url, 'patch')
+        if json_data is not None:
+            for key in json_data.keys():
+                ret_location = alt_location.Location()
+                ret_location.to_location(json_data[key])
+                return ret_location
+        return None
 
     def remove_host(self, location):
-        pass
+        url = 'https://{}{}/{}.json'.format(self.firebase_host, self.firebase_path,
+            location.name)
+        json_data = self.make_request_(url, 'delete')
+        ret_location = alt_location.Location()
+        ret_location.to_location(json_data)
+        return ret_location
+
+    def make_request_(self, url, caller):
+        if caller == 'get':
+            response = requests.get(url)
+        elif caller == 'patch':
+            response = requests.patch(url)
+        elif caller == 'delete':
+            response = requests.delete(url)
+        return json.loads(response.text)
