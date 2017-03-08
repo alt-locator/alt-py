@@ -39,7 +39,7 @@ setuptools.setup(
     license = license,
     packages = setuptools.find_packages(exclude=('tests', 'docs')),
     cmdclass = {
-        'test': PyTest,    
+        'test': PyTest,
     },
     entry_points = {
         'console_scripts': ['yapf = yapf:run_main'],
