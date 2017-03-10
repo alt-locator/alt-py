@@ -6,6 +6,10 @@ import unittest
 import json
 from mock import MagicMock
 
+class MockResponse(object):
+    def __init__(self, status_code):
+        self.status_code = status_code
+
 
 class FirebaseStorageTest(unittest.TestCase):
     """Firebase storage tests"""
@@ -65,15 +69,17 @@ class FirebaseStorageTest(unittest.TestCase):
         location.name = 'baz'
 
         update_host = firebase_test.update_host(location)
-        self.assertEqual(update_host.name, 'baz')
-        self.assertIsNone(update_host.external_ip_address)
-        self.assertIsNone(update_host.local_ip_address)
-        self.assertIsNone(update_host.mac_address)
-        self.assertIsNone(update_host.ports)
-        self.assertIsNone(update_host.timestamp)
+        self.assertEqual(update_host, True)
 
-        # def test_remove_host(self):
-        #   pass
+    def test_remove_host(self):
+        firebase_test = firebase_storage.FirebaseStorage()
+        mock_response = MockResponse(200)
+        firebase_test.make_request_ = MagicMock(return_value=mock_response)
+        location = alt_location.Location()
+        location.name = 'baz'
+
+        remove_host = firebase_test.remove_host(location)
+        self.assertEqual(remove_host, True)
 
 if __name__ == '__main__':
     unittest.main()

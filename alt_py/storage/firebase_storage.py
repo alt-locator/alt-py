@@ -31,25 +31,26 @@ class FirebaseStorage(alt_storage.AltStorage):
             location.name)
         json_data = self.make_request_(url, 'patch')
         if json_data is not None:
-            for key in json_data.keys():
-                ret_location = alt_location.Location()
-                ret_location.to_location(json_data[key])
-                return ret_location
-        return None
+            return True
+        else:
+            return False
 
     def remove_host(self, location):
         url = 'https://{}{}/{}.json'.format(self.firebase_host, self.firebase_path,
             location.name)
-        json_data = self.make_request_(url, 'delete')
-        ret_location = alt_location.Location()
-        ret_location.to_location(json_data)
-        return ret_location
+        response = self.make_request_(url, 'delete')
+        if response.status_code == 200:
+            return True
+        else:
+            return False
 
     def make_request_(self, url, caller):
         if caller == 'get':
             response = requests.get(url)
+            return json.loads(response.text)
         elif caller == 'patch':
             response = requests.patch(url)
+            return json.loads(response.text)
         elif caller == 'delete':
-            response = requests.delete(url)
-        return json.loads(response.text)
+            return requests.delete(url)
+        
