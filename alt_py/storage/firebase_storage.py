@@ -27,8 +27,8 @@ class FirebaseStorage(alt_storage.AltStorage):
         return sorted(locations, key=lambda loc: loc.name)
 
     def update_host(self, location):
-        url = 'https://{}{}/{}.json'.format(self.firebase_host, self.firebase_path,
-            location.name)
+        url = 'https://{}{}/{}.json'.format(self.firebase_host,
+                                            self.firebase_path, location.name)
         json_data = self.make_request_(url, 'patch')
         if json_data is not None:
             return True
@@ -36,8 +36,8 @@ class FirebaseStorage(alt_storage.AltStorage):
             return False
 
     def remove_host(self, location):
-        url = 'https://{}{}/{}.json'.format(self.firebase_host, self.firebase_path,
-            location.name)
+        url = 'https://{}{}/{}.json'.format(self.firebase_host,
+                                            self.firebase_path, location.name)
         response = self.make_request_(url, 'delete')
         if response.status_code == 200:
             return True
@@ -53,4 +53,3 @@ class FirebaseStorage(alt_storage.AltStorage):
             return json.loads(response.text)
         elif caller == 'delete':
             return requests.delete(url)
-        
